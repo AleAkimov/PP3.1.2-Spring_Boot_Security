@@ -28,18 +28,18 @@
 <body>
 <table>
     <tr>
-        <th>Name</th>
-        <th>Country</th>
-        <th>Age</th>
+        <th>Имя</th>
+        <th>Компания</th>
+        <th>Возраст</th>
         <th>Логин</th>
     </tr>
     <tr th:each="user : ${users}">
         <td th:text="${user.name}">Имя</td>
-        <td th:text="${user.country}">Страна</td>
+        <td th:text="${user.company}">Страна</td>
         <td th:text="${user.age}">Возраст</td>
         <td th:text="${user.username}">Логин</td>
         <td>
-            <a th:href="@{/admin/users/edit(id=${user.id})}" title="Update user">Update user</a>
+            <a th:href="@{/admin/users/edit(id=${user.id})}" title="Update user">Редактировать</a>
             <form th:method="POST" th:action="@{/admin/users/delete(id=${user.id})}"
                   th:onsubmit="return confirm('Вы уверены, что хотите удалить этого пользователя?')" style="display:inline;">
                 <button type="submit">Удалить</button>
@@ -48,7 +48,7 @@
     </tr>
 </table>
 <br/>
-<a th:href="@{/admin/users/addUser}">New user</a>
+<a th:href="@{/admin/users/addUser}">Добавить пользователя</a>
 <form th:method="POST" th:action="@{/logout}" style="display:inline;">
     <button type="submit" class="logout-button">Выйти</button>
 </form>

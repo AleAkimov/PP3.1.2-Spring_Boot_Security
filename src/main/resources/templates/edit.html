@@ -11,95 +11,48 @@
 </head>
 <body>
 
-<h1>Create/Edit User</h1>
+<h1>Редактирование пользователя</h1>
 
 <form th:method="POST" th:action="@{/admin/users/edit(id=${user.id})}" th:object="${user}">
-    <!--    <div>-->
-    <!--        <label for="name">Name:</label>-->
-    <!--        <input type="text" th:field="*{name}" id="name" placeholder="Name" required>-->
-    <!--        <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>-->
-    <!--    </div>-->
-    <!--    <br>-->
-
-    <!--    <div>-->
-    <!--        <label for="country">Country:</label>-->
-    <!--        <input type="text" th:field="*{country}" id="country" placeholder="Country" required>-->
-    <!--        <div class="error" th:if="${#fields.hasErrors('country')}" th:errors="*{country}"></div>-->
-    <!--    </div>-->
-    <!--    <br>-->
-
-    <!--    <div>-->
-    <!--        <label for="age">Age:</label>-->
-    <!--        <input type="number" th:field="*{age}" id="age" placeholder="Age" required>-->
-    <!--        <div class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>-->
-    <!--    </div>-->
-    <!--    <br>-->
-
-    <!--    <div>-->
-    <!--        <label for="username">Username:</label>-->
-    <!--        <input type="text" th:field="*{username}" id="username" placeholder="Username" required>-->
-    <!--        <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>-->
-    <!--    </div>-->
-    <!--    <br>-->
-
-    <!--    <div>-->
-    <!--        <label for="password">Password:</label>-->
-    <!--        <input type="password" th:field="*{password}" id="password" placeholder="Password" required>-->
-    <!--        <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>-->
-    <!--    </div>-->
-    <!--    <br>-->
-
-
-    <!--    <div>-->
-    <!--        <label for="roles">Select role:</label>-->
-    <!--        <select id="roles" th:field="*{roles}" multiple>-->
-    <!--            <option th:each="role : ${roles}"-->
-    <!--                    th:value="${role.id}"-->
-    <!--                    th:text="${role.roleName}"-->
-    <!--                    th:selected="${user.roles.contains(role)}"></option>-->
-    <!--        </select>-->
-    <!--        <div class="error" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"></div>-->
-    <!--    </div>-->
-    <!--    <br>-->
     <div>
-        <label for="name">Name:</label>
-        <input type="text" th:field="*{name}" id="name" placeholder="Name" required th:required="true"
+        <label for="name">Имя:</label>
+        <input type="text" th:field="*{name}" id="name" placeholder="Имя" required th:required="true"
                aria-describedby="nameError">
-        <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+        <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Ошибка</div>
     </div>
     <br>
     <div>
-        <label for="country">Country:</label>
-        <input type="text" th:field="*{country}" id="country" placeholder="Country" required th:required="true"
-               aria-describedby="countryError">
-        <div class="error" th:if="${#fields.hasErrors('country')}" th:errors="*{country}">Country Error</div>
+        <label for="company">Компания:</label>
+        <input type="text" th:field="*{company}" id="company" placeholder="Компания" required th:required="true"
+               aria-describedby="companyError">
+        <div class="error" th:if="${#fields.hasErrors('company')}" th:errors="*{company}">Ошибка</div>
     </div>
     <br>
     <div>
-        <label for="age">Age:</label>
-        <input type="number" th:field="*{age}" id="age" placeholder="Age" required th:required="true" min="0"
+        <label for="age">Возраст:</label>
+        <input type="number" th:field="*{age}" id="age" placeholder="Ворзаст" required th:required="true" min="0"
                aria-describedby="ageError">
-        <div class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
+        <div class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Ошибка</div>
     </div>
     <br>
     <div>
-        <label for="username">Username:</label>
-        <input type="text" th:field="*{username}" id="username" placeholder="Username" required th:required="true"
+        <label for="username">Логин:</label>
+        <input type="text" th:field="*{username}" id="username" placeholder="Логин" required th:required="true"
                aria-describedby="usernameError">
-        <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
+        <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Ошибка</div>
     </div>
     <br>
     <div>
-        <label for="password">Password:</label>
-        <input type="password" th:field="*{password}" id="password" placeholder="Password" required th:required="true"
+        <label for="password">Пароль:</label>
+        <input type="password" th:field="*{password}" id="password" placeholder="Пароль" required th:required="true"
                aria-describedby="passwordError">
-        <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
+        <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Ошибка</div>
     </div>
     <br>
     <div>
 
         <div>
-            <p>Select User Roles:</p>
+            <p>Выбор уровня доступа:</p>
             <th:block th:each="role : ${availableRoles}">
                 <label>
                     <input type="checkbox" name="roles" th:value="${role.id}">
@@ -112,8 +65,7 @@
     <br>
 
     <div>
-        <input type="submit" value="Save"/>
-        <input type="reset" value="Reset"/>
+        <input type="submit" value="Сохранить"/>
     </div>
 </form>
 </body>

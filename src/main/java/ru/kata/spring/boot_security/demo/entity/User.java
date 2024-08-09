@@ -28,7 +28,7 @@ public class User implements UserDetails {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", country='" + country + '\'' +
+                ", country='" + company + '\'' +
                 ", age=" + age +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
@@ -42,7 +42,7 @@ public class User implements UserDetails {
 
     private String name;
 
-    private String country;
+    private String company;
 
     private Byte age;
 
@@ -66,9 +66,9 @@ public class User implements UserDetails {
 
     }
 
-    public User(String name, String country, Byte age, String username) {
+    public User(String name, String company, Byte age, String username) {
         this.name = name;
-        this.country = country;
+        this.company = company;
         this.age = age;
         this.username = username;
     }
@@ -89,12 +89,12 @@ public class User implements UserDetails {
         this.name = name;
     }
 
-    public String getCountry() {
-        return country;
+    public String getCompany() {
+        return company;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setCountry(String company) {
+        this.company = company;
     }
 
     public Byte getAge() {

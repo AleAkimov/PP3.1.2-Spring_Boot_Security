@@ -17,24 +17,24 @@
             background-color: #f4f4f4;
         }
         button {
-            background-color: #f44336; /* Красный цвет для кнопок удаления */
+            background-color: #f44336;
             color: white;
             border: none;
             padding: 5px 10px;
             cursor: pointer;
         }
         button:hover {
-            opacity: 0.8; /* Эффект при наведении на кнопку */
+            opacity: 0.8;
         }
         .logout-button {
-            background-color: #007BFF; /* Синий цвет для кнопки логина */
+            background-color: #007BFF;
             padding: 10px 15px;
             color: white;
             border: none;
             cursor: pointer;
         }
         .logout-button:hover {
-            opacity: 0.8; /* Эффект при наведении на кнопку */
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -42,48 +42,22 @@
 <h1>Привет, пользователь!</h1>
 <br><br>
 
-<a th:href="@{/logout}" class="logout-button">Logout</a>
+<a th:href="@{/logout}" class="logout-button">Выйти</a>
 <br><br>
 
 <table>
     <tr>
         <th>Id</th>
-        <th>Name</th>
-        <th>Country</th>
-        <th>Age</th>
+        <th>Имя</th>
+        <th>Компания</th>
+        <th>Возраст</th>
     </tr>
     <tr th:object="${user}">
         <td th:text="${user.id}">id</td>
-        <td th:text="${user.name}">Name</td>
-        <td th:text="${user.country}">Country</td>
-        <td th:text="${user.age}">Age</td>
+        <td th:text="${user.name}">Имя</td>
+        <td th:text="${user.company}">Компания</td>
+        <td th:text="${user.age}">Возраст</td>
     </tr>
 </table>
 </body>
 </html>
-<!--<!DOCTYPE html>-->
-<!--<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <title>Spring Security Example</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--<h1>Привет, пользователь!</h1>-->
-<!--<br><br>-->
-<!--<a th:href="@{/logout}">Logout</a>-->
-<!--<br><br>-->
-<!--<table border="1">-->
-<!--    <tr>-->
-<!--        <th>Id</th>-->
-<!--        <th>Name</th>-->
-<!--        <th>Country</th>-->
-<!--        <th>Age</th>-->
-<!--    </tr>-->
-<!--    <tr th:object="${user}">-->
-<!--        <td th:utext="${user.getId}">id</td>-->
-<!--        <td th:utext="${user.getName()}">Name</td>-->
-<!--        <td th:utext="${user.getCountry()}">Country</td>-->
-<!--        <td th:utext="${user.getAge()}">Age</td>-->
-<!--    </tr>-->
-<!--</table>-->
-<!--</body>-->
-<!--</html>-->
