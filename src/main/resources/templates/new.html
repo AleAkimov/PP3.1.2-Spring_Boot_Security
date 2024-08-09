@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create User</title>
+    <style>
+        {
+            width: 300px
+        ;
+            height: 100px
+        ;
+        }
+        .error {
+            color: red;
+        }
+
+        input[type="text"], input[type="number"], input[type="password"], select {
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 300px;
+        }
+
+        input[type="submit"], input[type="button"] {
+            margin-top: 10px;
+            padding: 10px 15px;
+        }
+    </style>
+</head>
+
+<body>
+<h1>Create New User</h1>
+
+<form th:action="@{/admin/users/addUser}" th:object="${user}" th:method="POST">
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" th:field="*{name}" id="name" placeholder="Name" required th:required="true"
+               aria-describedby="nameError">
+        <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+    </div>
+    <br>
+    <div>
+        <label for="country">Country:</label>
+        <input type="text" th:field="*{country}" id="country" placeholder="Country" required th:required="true"
+               aria-describedby="countryError">
+        <div class="error" th:if="${#fields.hasErrors('country')}" th:errors="*{country}">Country Error</div>
+    </div>
+    <br>
+    <div>
+        <label for="age">Age:</label>
+        <input type="number" th:field="*{age}" id="age" placeholder="Age" required th:required="true" min="0"
+               aria-describedby="ageError">
+        <div class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
+    </div>
+    <br>
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" th:field="*{username}" id="username" placeholder="Username" required th:required="true"
+               aria-describedby="usernameError">
+        <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Username Error</div>
+    </div>
+    <br>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" th:field="*{password}" id="password" placeholder="Password" required th:required="true"
+               aria-describedby="passwordError">
+        <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
+    </div>
+    <br>
+    <div>
+
+        <div>
+            <p>Select User Roles:</p>
+            <th:block th:each="role : ${availableRoles}">
+                <label>
+                    <input type="checkbox" name="roles" th:value="${role.id}">
+                    <span th:text="${role.roleName}"></span>
+                </label>
+                <br/>
+            </th:block>
+        </div>
+    </div>
+    <br>
+    <div>
+        <input type="submit" value="Create User">
+        <input type="reset" value="Reset Form">
+    </div>
+</form>
+
+<br/>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Logout"/>
+</form>
+</body>
+</html>

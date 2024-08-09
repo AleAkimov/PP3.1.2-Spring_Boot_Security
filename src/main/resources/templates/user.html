@@ -1,11 +1,89 @@
+
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Spring Security Example</title>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        button {
+            background-color: #f44336; /* Красный цвет для кнопок удаления */
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            opacity: 0.8; /* Эффект при наведении на кнопку */
+        }
+        .logout-button {
+            background-color: #007BFF; /* Синий цвет для кнопки логина */
+            padding: 10px 15px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .logout-button:hover {
+            opacity: 0.8; /* Эффект при наведении на кнопку */
+        }
+    </style>
 </head>
 <body>
-<h1>User, welcome spring boot security page!</h1>
+<h1>Привет, пользователь!</h1>
+<br><br>
 
+<a th:href="@{/logout}" class="logout-button">Logout</a>
+<br><br>
 
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Country</th>
+        <th>Age</th>
+    </tr>
+    <tr th:object="${user}">
+        <td th:text="${user.id}">id</td>
+        <td th:text="${user.name}">Name</td>
+        <td th:text="${user.country}">Country</td>
+        <td th:text="${user.age}">Age</td>
+    </tr>
+</table>
 </body>
 </html>
+<!--<!DOCTYPE html>-->
+<!--<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Spring Security Example</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>Привет, пользователь!</h1>-->
+<!--<br><br>-->
+<!--<a th:href="@{/logout}">Logout</a>-->
+<!--<br><br>-->
+<!--<table border="1">-->
+<!--    <tr>-->
+<!--        <th>Id</th>-->
+<!--        <th>Name</th>-->
+<!--        <th>Country</th>-->
+<!--        <th>Age</th>-->
+<!--    </tr>-->
+<!--    <tr th:object="${user}">-->
+<!--        <td th:utext="${user.getId}">id</td>-->
+<!--        <td th:utext="${user.getName()}">Name</td>-->
+<!--        <td th:utext="${user.getCountry()}">Country</td>-->
+<!--        <td th:utext="${user.getAge()}">Age</td>-->
+<!--    </tr>-->
+<!--</table>-->
+<!--</body>-->
+<!--</html>-->

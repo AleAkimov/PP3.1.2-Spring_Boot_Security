@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Start page</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Country</th>
+        <th>Age</th>
+        <th>Логин</th>
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.name}">Имя</td>
+        <td th:text="${user.country}">Страна</td>
+        <td th:text="${user.age}">Возраст</td>
+        <td th:text="${user.username}">Логин</td>
+        <td>
+            <a th:href="@{/admin/users/edit(id=${user.id})}" title="Update user">Update user</a>
+            <form th:method="POST" th:action="@{/admin/users/delete(id=${user.id})}"
+                  th:onsubmit="return confirm('Вы уверены, что хотите удалить этого пользователя?')" style="display:inline;">
+                <button type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<br/>
+<a th:href="@{/admin/users/addUser}">New user</a>
+<form th:method="POST" th:action="@{/logout}" style="display:inline;">
+    <button type="submit" class="logout-button">Выйти</button>
+</form>
+</body>
+</html>
