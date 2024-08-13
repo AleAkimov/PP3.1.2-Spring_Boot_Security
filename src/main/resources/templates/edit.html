@@ -1,44 +1,114 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>New user</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
     <style>
-        .error {
-            color: red;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #495057;
+        }
+        input[type="email"],
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        input[type="email"]:focus,
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            border-color: #80bdff;
+            outline: none;
+        }
+        .form-text {
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        .btn:hover {
+            opacity: 0.8;
         }
     </style>
 </head>
 <body>
+<div class="container">
+    <h1>Edit User</h1>
+    <form th:action="@{/admin/users/edit/{id}(id=${user.id})}" method="post">
+        <input type="hidden" name="id" th:value="${user.id}"/>
 
-<h1>Редактирование пользователя</h1>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" th:value="${user.email}" required/>
+        </div>
 
-<form th:method="POST" th:action="@{/admin/users/edit(id=${user.id})}" th:object="${user}">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" class="form-control" th:value="${user.name}" required/>
+        </div>
 
-<!--    <form th:action="@{/admin/users/addUser}" th:object="${user}" th:method="POST">-->
-        <label for="email"><b>Email</b></label>
-        <input th:name="email" th:type="text" class="form-control" id="email" required/>
-        <br>
-        <label for="name"><b>Name</b></label>
-        <input th:name="name" th:type="text" class="form-control" id="name" required/>
-        <br>
-        <label for="surname"><b>Company</b></label>
-        <input th:name="company" th:type="text" class="form-control" id="surname" required/>
-        <br>
-        <label for="password"><b>Password</b></label>
-        <input th:name="password" th:field="*{password}" th:type="password" class="form-control"
-               id="password"/>
-        <br>
-        <label for="exampleFormControlSelect3"><b>Role</b></label>
-        <select multiple size="2" name="select_role" class="form-control" id="exampleFormControlSelect3">
-            <option th:each="role : ${role}" th:value="${role.getAuthority()}"
-                    th:text="${role.getAuthority() == 'ROLE_ADMIN'} ? 'ADMIN' : 'USER'"></option>
-        </select>
-        <br>
+        <div class="form-group">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" class="form-control" th:value="${user.company}"/>
+        </div>
 
-    <div>
-        <input type="submit" value="Сохранить"/>
-    </div>
-</form>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control"/>
+            <small class="form-text">Leave blank if you don't want to change the password.</small>
+        </div>
+
+        <div class="form-group">
+            <label>Roles</label>
+            <select name="roles" multiple>
+                <option th:each="role : ${role}" th:value="${role.getRole()}" th:text="${role.getRole()}"></option>
+            </select>
+            <small class="form-text">Hold down the Ctrl (Windows) or Command (Mac) button to select multiple options.</small>
+        </div>
+
+        <button type="submit" class="btn">Update User</button>
+        <a th:href="@{/admin}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
 </body>
 </html>

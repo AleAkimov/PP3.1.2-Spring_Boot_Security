@@ -1,60 +1,94 @@
-
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Start page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
         th, td {
-            padding: 8px;
             border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
         }
         th {
-            background-color: #f4f4f4;
+            background-color: #f2f2f2;
         }
-        button {
-            background-color: #f44336;
+        .button {
+            padding: 10px 15px;
+            margin: 5px;
+            text-decoration: none;
             color: white;
+            background-color: #007BFF;
             border: none;
-            padding: 5px 10px;
+            border-radius: 5px;
             cursor: pointer;
+        }
+        .button-warning {
+            background-color: #FFC107; /* Yellow for Edit button */
+        }
+        .button-danger {
+            background-color: #DC3545; /* Red for Delete button */
+        }
+        .button-secondary {
+            background-color: #6C757D; /* Gray for secondary actions */
+        }
+        .button:hover {
+            opacity: 0.8;
+        }
+        .button:active {
+            opacity: 0.6;
+        }
+        form {
+            display: inline;
         }
     </style>
 </head>
 <body>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Email</th>
-        <th>Name</th>
-        <th>Company</th>
-        <th>Role</th>
-        <th>Edit</th>
-        <th>Delete</th>
-    </tr>
-    <tr th:each="user : ${users}">
-        <td th:text="${user.id}">id</td>
-        <td th:text="${user.email}">email</td>
-        <td th:text="${user.name}">name</td>
-        <td th:text="${user.company}">company</td>
-        <td th:text="${user.shortRoles}">roles</td>
-        <td>
-            <a th:href="@{/admin/users/edit(id=${user.id})}" th:object="${user}" th:method="GET"> Редактировать</a>
-            <form th:method="POST" th:action="@{/admin/users/delete(id=${user.id})}"
-                  th:onsubmit="return confirm('Вы уверены, что хотите удалить этого пользователя?')" style="display:inline;">
-                <button type="submit">Удалить</button>
-            </form>
-        </td>
-    </tr>
-</table>
-<br/>
-<a th:href="@{/admin/users/addUser}">Добавить пользователя</a>
-<form th:method="POST" th:action="@{/logout}" style="display:inline;">
-    <button type="submit" class="logout-button">Выйти</button>
-</form>
+<div class="container">
+    <h1>Users</h1>
+    <h2 th:text="${user.name}"></h2>
+    <div>
+        <a th:href="@{/admin/users/addUser}" class="button">Add New User</a>
+        <a th:href="@{/logout}" class="button button-secondary">Logout</a>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Company</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.company}"></td>
+            <td>
+                <a th:href="@{/admin/users/edit/{id}(id=${user.id})}" class="button button-warning">Edit</a>
+                <form th:action="@{/admin/users/delete}" method="post" style="display:inline;">
+                    <input type="hidden" name="id" th:value="${user.id}"/>
+                    <button type="submit" class="button button-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

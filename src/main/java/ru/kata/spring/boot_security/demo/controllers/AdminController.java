@@ -56,25 +56,46 @@ public class AdminController {
         userService.saveUser(user, roles);
         return "redirect:/admin";
     }
-
     @GetMapping("/users/edit/{id}")
-    public String updateUserById(@ModelAttribute("user") User user, Model model,
-                                 @RequestParam(value = "select_role", required = false) String[] roles) {
+    public String updateUserById(@PathVariable("id") int id, Model model) {
+        User user = userService.getUserById(id); // Получаем пользователя по ID
         model.addAttribute("user", user);
         model.addAttribute("role", roleService.getAllRoles());
-        userService.updateUser(user, roles);
-        return "redirect:/admin";
-
+        return "edit"; // Возвращаем страницу редактирования
     }
 
-    @PostMapping("/users/edit")
+    @PostMapping("/users/edit/{id}")
     public String updateUser(@ModelAttribute("user") User user,
-                             @RequestParam(value = "roles") String[] roles,
+                             @RequestParam(value = "roles", required = false) String[] roles,
                              @ModelAttribute("pass") String pass) {
         System.out.println(user.toString());
+
+        // Проверяем на null и инициализируем пустым массивом
+        if (roles == null) {
+            roles = new String[0];
+        }
+
         userService.updateUser(user, roles);
         return "redirect:/admin";
     }
+//    @GetMapping("/users/edit/{id}")
+//    public String updateUserById(@ModelAttribute("user") User user, Model model,
+//                                 @RequestParam(value = "select_role", required = false) String[] roles) {
+//        model.addAttribute("user", user);
+//        model.addAttribute("role", roleService.getAllRoles());
+//        userService.updateUser(user, roles);
+//        return "redirect:/admin";
+//
+//    }
+//
+//    @PostMapping("/users/edit/{id}")
+//    public String updateUser(@ModelAttribute("user") User user,
+//                             @RequestParam(value = "roles") String[] roles,
+//                             @ModelAttribute("pass") String pass) {
+//        System.out.println(user.toString());
+//        userService.updateUser(user, roles);
+//        return "redirect:/admin";
+//    }
 
     @PostMapping("/users/delete")
     public String deleteUser(Model model, @RequestParam int id) {
