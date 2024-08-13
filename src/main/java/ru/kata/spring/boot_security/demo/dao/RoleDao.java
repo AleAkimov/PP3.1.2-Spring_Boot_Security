@@ -1,10 +1,13 @@
 package ru.kata.spring.boot_security.demo.dao;
 
 
-import ru.kata.spring.boot_security.demo.entity.Role;
+
+import ru.kata.spring.boot_security.demo.model.Role;
+
+import java.util.List;
 
 public interface RoleDao {
     void saveRole(Role role);
 
-    Role getRole(String roleName);
+    List<Role> getAllRoles();
 }

@@ -1,69 +1,88 @@
 package ru.kata.spring.boot_security.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
-import ru.kata.spring.boot_security.demo.entity.User;
+import ru.kata.spring.boot_security.demo.model.Role;
+import ru.kata.spring.boot_security.demo.model.User;
 
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-
-import java.util.stream.Collectors;
-
+import java.util.Set;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
-    private RoleService roleService;
-
-    private UserDao userDao;
-
-    private PasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final UserDao userDao;
+    private final RoleService roleService;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, PasswordEncoder passwordEncoder, RoleService roleService) {
+    public UserServiceImpl(UserDao userDao, @Lazy PasswordEncoder passwordEncoder, RoleService roleService) {
         this.userDao = userDao;
-        this.bCryptPasswordEncoder = passwordEncoder;
+        this.passwordEncoder = passwordEncoder;
         this.roleService = roleService;
     }
 
     @Override
-    @Transactional
-    public List<User> getUsers() {
-        return userDao.getUsers();
+    @Transactional(readOnly = true)
+    public List<User> getAllUsers() {
+        return userDao.getAllUsers();
     }
 
     @Override
-    @Transactional
-    public void add(User user, String password, String[] roles) {
-        user.setPassword(bCryptPasswordEncoder.encode(password));
-        user.setRoles(Arrays.stream(roles).map(r -> roleService.getRole(r)).collect(Collectors.toList()));
-        userDao.add(user);
+    public void saveUser(User user, String[] roles) {
+        if (!(userDao.findByUsername(user.getEmail()).isEmpty())) {
+            throw new RuntimeException("Name already used");
+        }
+
+        Set<Role> role = new HashSet<>();
+        role.add(roleService.getAllRoles().get(1));
+        for (String s : roles) {
+            if (s.equals("ROLE_ADMIN")) {
+                role.add(roleService.getAllRoles().get(0));
+            }
+        }
+        user.setRoles(role);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userDao.saveUser(user);
     }
 
     @Override
-    @Transactional
-    public void update(User user, String[] roles) {
-        user.setRoles(Arrays.stream(roles).map(r -> roleService.getRole(r)).collect(Collectors.toList()));
-        userDao.update(user);
-    }
-
-    @Override
-    @Transactional
-    public void delete(Long id) {
-        userDao.delete(id);
-    }
-
-    @Override
-    @Transactional
-    public User getUserById(Long id) {
+    @Transactional(readOnly = true)
+    public User getUserById(int id) {
         return userDao.getUserById(id);
     }
 
     @Override
-    public User findUserByUsername(String username) {
-        return userDao.findUserByUsername(username);
+    public void updateUser(User user, String[] roles) {
+        Set<Role> role = new HashSet<>();
+        role.add(roleService.getAllRoles().get(1));
+        for (String s : roles) {
+            if (s.equals("ROLE_ADMIN")) {
+                role.add(roleService.getAllRoles().get(0));
+            }
+        }
+        user.setRoles(role);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userDao.updateUser(user);
     }
+
+    @Override
+    public void deleteUserById(int id) {
+        userDao.deleteUserById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String email) {
+        List<User> user = userDao.findByUsername(email);
+        return user.get(0);
+    }
+
 }

@@ -52,11 +52,12 @@
         <th>Компания</th>
         <th>Возраст</th>
     </tr>
-    <tr th:object="${user}">
-        <td th:text="${user.id}">id</td>
-        <td th:text="${user.name}">Имя</td>
-        <td th:text="${user.company}">Компания</td>
-        <td th:text="${user.age}">Возраст</td>
+    <tr>
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.company}"></td>
+        <td th:text="${user.shortRoles}"></td>
     </tr>
 </table>
 </body>

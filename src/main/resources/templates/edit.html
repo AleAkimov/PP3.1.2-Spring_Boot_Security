@@ -14,55 +14,27 @@
 <h1>Редактирование пользователя</h1>
 
 <form th:method="POST" th:action="@{/admin/users/edit(id=${user.id})}" th:object="${user}">
-    <div>
-        <label for="name">Имя:</label>
-        <input type="text" th:field="*{name}" id="name" placeholder="Имя" required th:required="true"
-               aria-describedby="nameError">
-        <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Ошибка</div>
-    </div>
-    <br>
-    <div>
-        <label for="company">Компания:</label>
-        <input type="text" th:field="*{company}" id="company" placeholder="Компания" required th:required="true"
-               aria-describedby="companyError">
-        <div class="error" th:if="${#fields.hasErrors('company')}" th:errors="*{company}">Ошибка</div>
-    </div>
-    <br>
-    <div>
-        <label for="age">Возраст:</label>
-        <input type="number" th:field="*{age}" id="age" placeholder="Ворзаст" required th:required="true" min="0"
-               aria-describedby="ageError">
-        <div class="error" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Ошибка</div>
-    </div>
-    <br>
-    <div>
-        <label for="username">Логин:</label>
-        <input type="text" th:field="*{username}" id="username" placeholder="Логин" required th:required="true"
-               aria-describedby="usernameError">
-        <div class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Ошибка</div>
-    </div>
-    <br>
-    <div>
-        <label for="password">Пароль:</label>
-        <input type="password" th:field="*{password}" id="password" placeholder="Пароль" required th:required="true"
-               aria-describedby="passwordError">
-        <div class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Ошибка</div>
-    </div>
-    <br>
-    <div>
 
-        <div>
-            <p>Выбор уровня доступа:</p>
-            <th:block th:each="role : ${availableRoles}">
-                <label>
-                    <input type="checkbox" name="roles" th:value="${role.id}">
-                    <span th:text="${role.roleName}"></span>
-                </label>
-                <br/>
-            </th:block>
-        </div>
-    </div>
-    <br>
+<!--    <form th:action="@{/admin/users/addUser}" th:object="${user}" th:method="POST">-->
+        <label for="email"><b>Email</b></label>
+        <input th:name="email" th:type="text" class="form-control" id="email" required/>
+        <br>
+        <label for="name"><b>Name</b></label>
+        <input th:name="name" th:type="text" class="form-control" id="name" required/>
+        <br>
+        <label for="surname"><b>Company</b></label>
+        <input th:name="company" th:type="text" class="form-control" id="surname" required/>
+        <br>
+        <label for="password"><b>Password</b></label>
+        <input th:name="password" th:field="*{password}" th:type="password" class="form-control"
+               id="password"/>
+        <br>
+        <label for="exampleFormControlSelect3"><b>Role</b></label>
+        <select multiple size="2" name="select_role" class="form-control" id="exampleFormControlSelect3">
+            <option th:each="role : ${role}" th:value="${role.getAuthority()}"
+                    th:text="${role.getAuthority() == 'ROLE_ADMIN'} ? 'ADMIN' : 'USER'"></option>
+        </select>
+        <br>
 
     <div>
         <input type="submit" value="Сохранить"/>
