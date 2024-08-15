@@ -82,16 +82,16 @@ public class AdminController {
     public String updateUser(@Validated(OnUpdate.class) @ModelAttribute("user") User user,
                              BindingResult bindingResult,
                              @RequestParam(value = "select_role", required = false) String[] roles,
-                             @RequestParam(value = "password", required = false) String password,
                              RedirectAttributes redirectAttributes) {
         System.out.println(user.toString());
         if (bindingResult.hasErrors()) {
             return "edit";
         }
 
-        if (password != null && !password.isEmpty()) {
-            user.setPassword(password);
-        }
+//        if (password != null && !password.isEmpty()) {
+//            user.setPassword(password);
+//            user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        }
 
         if (roles == null || roles.length == 0) {
             redirectAttributes.addFlashAttribute("error", "Пожалуйста, выберите хотя бы одну роль.");

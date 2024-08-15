@@ -71,7 +71,15 @@ public class UserServiceImpl implements UserService {
             }
         }
         user.setRoles(role);
+
+        if (user.getPassword().equals(existingUser.getPassword()) && user.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        } else {
+            user.setPassword(existingUser.getPassword());
+        }
+
         userDao.updateUser(user);
+
     }
 
 
