@@ -1,12 +1,11 @@
 package ru.kata.spring.boot_security.demo.dao;
 
-
-
-import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.models.User;
 
 import java.util.List;
 
 public interface UserDao {
+
     List<User> getAllUsers();
 
     void saveUser(User user);
@@ -17,5 +16,6 @@ public interface UserDao {
 
     void deleteUserById(int id);
 
-    List<User> findByUsername(String username);
+
+    List<User> findByUsername(String username, Class<User> clazz);
 }

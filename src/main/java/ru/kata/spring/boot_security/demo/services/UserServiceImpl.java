@@ -1,14 +1,14 @@
-package ru.kata.spring.boot_security.demo.service;
+package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
-import ru.kata.spring.boot_security.demo.model.Role;
-import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.exeption.UserAlreadyExistsException;
+import ru.kata.spring.boot_security.demo.models.Role;
+import ru.kata.spring.boot_security.demo.models.User;
 
 import java.util.HashSet;
 import java.util.List;
@@ -37,8 +37,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUser(User user, String[] roles) {
-        if (!(userDao.findByUsername(user.getEmail()).isEmpty())) {
-            throw new RuntimeException("Name already used");
+        if (!userDao.findByUsername(user.getEmail(), User.class).isEmpty()) {
+            throw new UserAlreadyExistsException("User with this email already exists");
         }
 
         Set<Role> role = new HashSet<>();
@@ -59,8 +59,10 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserById(id);
     }
 
+
     @Override
     public void updateUser(User user, String[] roles) {
+        User existingUser = userDao.getUserById(user.getId());
         Set<Role> role = new HashSet<>();
         role.add(roleService.getAllRoles().get(1));
         for (String s : roles) {
@@ -69,20 +71,13 @@ public class UserServiceImpl implements UserService {
             }
         }
         user.setRoles(role);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.updateUser(user);
     }
+
 
     @Override
     public void deleteUserById(int id) {
         userDao.deleteUserById(id);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String email) {
-        List<User> user = userDao.findByUsername(email);
-        return user.get(0);
     }
 
 }

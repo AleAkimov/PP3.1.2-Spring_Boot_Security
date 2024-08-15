@@ -54,6 +54,13 @@
             display: inline;
         }
     </style>
+    <script>
+        function confirmDeletion(event) {
+            if (!confirm('Вы уверены, что хотите удалить этого пользователя?')) {
+                event.preventDefault(); // Отменяем отправку формы, если пользователь отменил
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="container">
@@ -81,7 +88,7 @@
             <td th:text="${user.company}"></td>
             <td>
                 <a th:href="@{/admin/users/edit/{id}(id=${user.id})}" class="button button-warning">Edit</a>
-                <form th:action="@{/admin/users/delete}" method="post" style="display:inline;">
+                <form th:action="@{/admin/users/delete}" method="post" style="display:inline;" onsubmit="confirmDeletion(event);">
                     <input type="hidden" name="id" th:value="${user.id}"/>
                     <button type="submit" class="button button-danger">Delete</button>
                 </form>

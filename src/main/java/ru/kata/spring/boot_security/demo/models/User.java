@@ -1,8 +1,9 @@
-package ru.kata.spring.boot_security.demo.model;
+package ru.kata.spring.boot_security.demo.models;
 
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.kata.spring.boot_security.demo.validation.OnCreate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Set;
 
@@ -24,12 +26,17 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
+    @NotBlank(message = "Поле не может быть пустым")
     @Column(name = "email")
+    @NotBlank(message = "Поле не может быть пустым")
     private String email;
+    @NotBlank(message = "Поле не может быть пустым")
     @Column(name = "name")
     private String name;
+    @NotBlank(message = "Поле не может быть пустым")
     @Column(name = "company")
     private String company;
+    @NotBlank(message = "Поле не может быть пустым", groups = OnCreate.class)
     @Column(name = "password")
     private String password;
 
@@ -93,7 +100,6 @@ public class User implements UserDetails {
     public void setPassword(String password) {
         this.password = password;
     }
-
 
     public Set<Role> getRoles() {
         return roles;

@@ -1,23 +1,23 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.RoleService;
-import ru.kata.spring.boot_security.demo.service.UserService;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.kata.spring.boot_security.demo.models.User;
+import ru.kata.spring.boot_security.demo.services.RoleService;
+import ru.kata.spring.boot_security.demo.services.UserService;
+import ru.kata.spring.boot_security.demo.validation.OnCreate;
+import ru.kata.spring.boot_security.demo.validation.OnUpdate;
 
 @Controller
 @RequestMapping("/admin")
@@ -51,51 +51,57 @@ public class AdminController {
     }
 
     @PostMapping("/users/addUser")
-    public String addNewUser(@ModelAttribute("user") User user,
-                             @RequestParam(value = "select_role", required = false) String[] roles) {
-        userService.saveUser(user, roles);
+    public String addNewUser(@Validated(OnCreate.class) @ModelAttribute("newUser") User newUser,
+                             BindingResult bindingResult,
+                             @RequestParam(value = "select_role", required = false) String[] roles,
+                             RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Пожалуйста, исправьте ошибки.");
+            return "redirect:/admin/users/addUser";
+        }
+
+        if (roles == null || roles.length == 0) {
+            redirectAttributes.addFlashAttribute("error", "Пожалуйста, выберите хотя бы одну роль.");
+            return "redirect:/admin/users/addUser";
+        }
+
+        userService.saveUser(newUser, roles);
+        redirectAttributes.addFlashAttribute("success", "Пользователь успешно добавлен!");
         return "redirect:/admin";
     }
+
     @GetMapping("/users/edit/{id}")
     public String updateUserById(@PathVariable("id") int id, Model model) {
-        User user = userService.getUserById(id); // Получаем пользователя по ID
+        User user = userService.getUserById(id);
         model.addAttribute("user", user);
         model.addAttribute("role", roleService.getAllRoles());
-        return "edit"; // Возвращаем страницу редактирования
+        return "edit";
     }
 
     @PostMapping("/users/edit/{id}")
-    public String updateUser(@ModelAttribute("user") User user,
-                             @RequestParam(value = "roles", required = false) String[] roles,
-                             @ModelAttribute("pass") String pass) {
+    public String updateUser(@Validated(OnUpdate.class) @ModelAttribute("user") User user,
+                             BindingResult bindingResult,
+                             @RequestParam(value = "select_role", required = false) String[] roles,
+                             @RequestParam(value = "password", required = false) String password,
+                             RedirectAttributes redirectAttributes) {
         System.out.println(user.toString());
+        if (bindingResult.hasErrors()) {
+            return "edit";
+        }
 
-        // Проверяем на null и инициализируем пустым массивом
-        if (roles == null) {
-            roles = new String[0];
+        if (password != null && !password.isEmpty()) {
+            user.setPassword(password);
+        }
+
+        if (roles == null || roles.length == 0) {
+            redirectAttributes.addFlashAttribute("error", "Пожалуйста, выберите хотя бы одну роль.");
+            return "redirect:/admin/users/edit/" + user.getId(); // Возвращаем обратно на страницу редактирования
         }
 
         userService.updateUser(user, roles);
+        redirectAttributes.addFlashAttribute("success", "Пользователь успешно обновлен!");
         return "redirect:/admin";
     }
-//    @GetMapping("/users/edit/{id}")
-//    public String updateUserById(@ModelAttribute("user") User user, Model model,
-//                                 @RequestParam(value = "select_role", required = false) String[] roles) {
-//        model.addAttribute("user", user);
-//        model.addAttribute("role", roleService.getAllRoles());
-//        userService.updateUser(user, roles);
-//        return "redirect:/admin";
-//
-//    }
-//
-//    @PostMapping("/users/edit/{id}")
-//    public String updateUser(@ModelAttribute("user") User user,
-//                             @RequestParam(value = "roles") String[] roles,
-//                             @ModelAttribute("pass") String pass) {
-//        System.out.println(user.toString());
-//        userService.updateUser(user, roles);
-//        return "redirect:/admin";
-//    }
 
     @PostMapping("/users/delete")
     public String deleteUser(Model model, @RequestParam int id) {
