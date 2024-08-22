@@ -39,18 +39,28 @@ public class CreateTable {
 
     @PostConstruct
     public void create() {
-        if (roleDaoImpl.findByRoleName(adminRole.getRole()) == null) {
+        if (roleDaoImpl.findByRole(adminRole.getRole()) == null) {
             roleService.saveRole(adminRole);
-        }
-        if (roleDaoImpl.findByRoleName(userRole.getRole()) == null) {
-            roleService.saveRole(userRole);
+        } else {
+            System.out.println("Role " + adminRole.getRole() + " already exists.");
         }
 
-        if (userDaoImpl.getUserByEmail(admin.getEmail()) == null) {
-            userService.saveUser(admin, roleAdmin);
+        if (roleDaoImpl.findByRole(userRole.getRole()) == null) {
+            roleService.saveRole(userRole);
+        } else {
+            System.out.println("Role " + userRole.getRole() + " already exists.");
         }
-        if (userDaoImpl.getUserByEmail(user.getEmail()) == null) {
+
+        if (userDaoImpl.findUserByEmail(admin.getEmail()) == null) {
+            userService.saveUser(admin, roleAdmin);
+        } else {
+            System.out.println("User " + admin.getEmail() + " already exists.");
+        }
+
+        if (userDaoImpl.findUserByEmail(user.getEmail()) == null) {
             userService.saveUser(user, roleUser);
+        } else {
+            System.out.println("User " + user.getEmail() + " already exists.");
         }
     }
 }

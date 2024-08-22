@@ -2,7 +2,7 @@ package ru.kata.spring.boot_security.demo.dao;
 
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.reposiroty.UserRepository;
+//import ru.kata.spring.boot_security.demo.reposiroty.UserRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
@@ -12,13 +12,10 @@ import java.util.List;
 @Repository
 public class UserDaoImpl implements UserDao {
 
-    private final UserRepository userRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
-    public UserDaoImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public List<User> getAllUsers() {
@@ -57,8 +54,11 @@ public class UserDaoImpl implements UserDao {
                 .getResultList();
     }
 
-    public User getUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
+    @Override
+    public User findUserByEmail(String email) {
+        List<User> users = entityManager.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+                .setParameter("email", email)
+                .getResultList();
+        return users.isEmpty() ? null : users.get(0);
     }
-
 }
